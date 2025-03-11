@@ -160,23 +160,22 @@ body {
 /* Contenedor principal */
 #container {
     background-color: rgb(255, 255, 255);
-    padding: 40px; /* Reduced from 100px */
-    padding-left: 60px;
-    border-radius: 15px;
-    box-shadow: 0 5px 15px rgb(129, 129, 129);
+    padding: 20px; /* Reduce padding for smaller size */
+    padding-left: 30px;
+    border-radius: 10px;
+    box-shadow: 0 3px 10px rgb(129, 129, 129);
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    border: 3px solid #999999;
-    max-width: 1200px; /* Reduced from 1800px */
-    width: 70%; /* Reduced from 90% */
+    border: 2px solid #999999;
+    max-width: 800px; /* Reduce width */
+    width: 50%; /* Decrease from 70% */
     height: auto; /* Adjust dynamically */
     position: relative;
     text-align: center;
     overflow: hidden; /* Prevents excessive overflow */
 }
-
 
 /* ---------------------------------------------------------------------------------Línea decorativa superior--------------------------------------------------------------------------*/
 .menu-line {
