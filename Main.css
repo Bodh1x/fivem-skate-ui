@@ -158,30 +158,32 @@ body {
 }
 
 /* Contenedor principal */
+
 #container {
     background-color: rgb(255, 255, 255);
-    padding: 20px; /* Reduce padding for smaller size */
-    padding-left: 30px;
-    border-radius: 10px;
-    box-shadow: 0 3px 10px rgb(129, 129, 129);
+    padding: 30px; /* Reduce padding for smaller size */
+    padding-left: 45px;
+    border-radius: 13px;
+    box-shadow: 0 4px 13px rgb(129, 129, 129);
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    border: 2px solid #999999;
-    max-width: 800px; /* Reduce width */
-    width: 50%; /* Decrease from 70% */
+    border: 3px solid #999999;
+    max-width: 1000px; /* Reduce width */
+    width: 60%; /* Decrease from 70% */
     height: auto; /* Adjust dynamically */
     position: relative;
     text-align: center;
     overflow: hidden; /* Prevents excessive overflow */
 }
 
+
 /* ---------------------------------------------------------------------------------Línea decorativa superior--------------------------------------------------------------------------*/
 .menu-line {
     position: absolute;
-    top: 40px; /* Ajusta la altura de la línea */
-    width: 24.5%; /* Abarca de los botones de la izquierda a los de la derecha */
+    top: 50px; /* Ajusta la altura de la línea */
+    width: 22%; /* Abarca de los botones de la izquierda a los de la derecha */
     height: 13px; /* Grosor de la línea */
     background-color: rgb(124, 124, 124);
     z-index: 2; /* Asegura que se vea por encima del fondo */
@@ -189,14 +191,14 @@ body {
 
 /* Línea izquierda */
 .menu-line.left {
-    right: 66%;
+    right: 70%;
     /* width: 35%; */ /* Ajusta hasta el inicio del título */
     /* z-index: 0; */ /* Asegura que se vea por encima del fondo */
 }
 
 /* Línea derecha */
 .menu-line.right {
-    left: 66%;
+    left: 70%;
     /* width: 35%; */ /* Ajusta hasta el final del título */
     /* z-index: 0; */ /* Asegura que se vea por encima del fondo */
 }
@@ -205,7 +207,7 @@ body {
 .menu-title {
     font-family: 'JackSilver', sans-serif; /* Apply JackSilver font */
     position: relative;
-    top: -30px;
+    top: -20px;
     font-size: 60px; /* Adjust if needed */
     font-weight: bold;
     color: rgb(124, 124, 124);
@@ -357,7 +359,7 @@ body {
 .links {
     position: relative;
     z-index: 100;
-    bottom: -25px;
+    bottom: -15px;
     left: 50%;
     transform: translateX(-50%);
     display: flex;
@@ -471,24 +473,26 @@ body {
 /* Estilos específicos para el botón de cierre del contenedor principal */
 #closeContainer {
     position: absolute;
-    top: 15px; /* Adjust to align */
+    top: 15px;
     right: 15px;
-    width: 50px; /* Make sure the hitbox is large */
-    height: 50px;
+    width: 50px; /* Increase width for a larger clickable area */
+    height: 50px; /* Increase height for a better hitbox */
     display: flex;
     justify-content: center;
     align-items: center;
-    background: transparent; /* No background */
+    background: transparent;
+    border: none;
     border-radius: 50%;
     cursor: pointer;
-    font-size: 50px; /* Keep the X size */
+    font-size: 28px; /* Keep the X size */
     line-height: 50px; /* Center the X inside */
-    padding: 15px;
+    padding: 0; /* Ensure no unwanted padding */
 }
 
 #closeContainer:hover {
-    background-color: rgba(0, 0, 0, 0.1); /* Add a subtle hover effect */
+    background-color: rgba(0, 0, 0, 0.1);
 }
+
 
 .back-arrow {
     position: absolute;
