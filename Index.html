@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu</title>
+    <link rel="stylesheet" href="Main.css">
+</head>
+
+<body>
+    <script src="https://www.youtube.com/iframe_api"></script>
+    <!-- Modal para mostrar el video de YouTube -->
+    <div id="videoModal" class="modal">
+        <div class="modal-content">
+            <span class="close" id="closeModal">&times;</span>
+            <iframe id="youtubeVideo" width="100%" height="100%" 
+                src="https://www.youtube.com/embed/XmV02A6qT2E?enablejsapi=1&cc_load_policy=0" 
+                frameborder="0" allowfullscreen>
+            </iframe>
+        </div>
+    </div>
+
+    <!-- Main -------------------------------------------------------------------------------------------------------------------------------------------->
+    <div id="container" style="display: none;">
+        <button class="closeMain" id="closeContainer" onclick="closeMain()">×</button> <!-- Botón de cierre -->
+        <div class="menu-line left"></div>
+        <div class="menu-title">Bodhix's Studio</div>
+        <div class="menu-line right"></div>
+        <div class="menu">
+
+            <!-- <a href="best-spots.html" class="menu-item best-spots">
+                <img src="images/Spots.jpg" alt="Best Spots">
+            </a> -->
+
+            <button class="menu-item best-spots"> <!-- id="openMenuBox" -->
+                <img src="images/comingsoon.jpg" alt="Select Sport">
+                <span class="menu-text">EQUIPMENT</span>
+            </button>
+
+            <button class="menu-item select-sport" id="openMenuBox">
+                <img src="images/gear.jpg" alt="Select Sport">
+                <span class="menu-text">GEAR</span>
+            </button>
+            <button class="menu-item whats-new" id="openModal">
+                <img src="images/features.jpg" alt="What's New">
+                <span class="menu-text">WHAT'S NEW</span>
+            </button> 
+        </div>
+
+        <!-- Sección de enlaces -->
+        <div class="links">
+            <img src="images/Logos/Discord.png" alt="Discord" class="social-icon discord-icon" onclick="window.invokeNative('openUrl', 'https://discord.com/invite/PjN7AWqkpF');">
+            <img src="images/Logos/YouTube.png" alt="YouTube" class="social-icon youtube-icon" onclick="window.invokeNative('openUrl', 'https://youtube.com/@bodhix?si=qqenaPcA3cVcXf0b');">
+        </div>            
+    </div>
+
+    <div id="menuBox" style="display: none;"> 
+        <!-- Logo -->
+        <img src="images/logo.png" alt="Logo" id="logo">
+
+        <!-- First Page -->
+        <div id="firstPage">
+            <div class="buttons">
+                <button class="words-style" onclick="proceedToMainMenu()">Skateboard</button>
+                <button class="back-arrow" onclick="goBack()">&#11013;</button> <!-------------------------------------------------------goBack--------------------------------------------------->
+            </div>
+        </div>
+
+        <!-- Main (Skate) Menu -->
+        <div id="mainMenu" style="display: none;">
+            <div class="buttons">
+                <button class="words-style" onclick="showSubMenu('deck')">Deck</button>
+                <button class="words-style" onclick="showSubMenu('trucks')">Trucks</button>
+                <button class="words-style" onclick="showSubMenu('wheels')">Wheels</button>
+                <button class="back-arrow" onclick="goBack()">&#11013;</button>
+            </div>
+        </div>
+
+        <!-- Submenu -->
+        <div id="subMenu" style="display: none;">
+            <h1 id="submenu-title">Submenu</h1>
+            <div id="options"></div>
+            <button class="back-arrow" onclick="goBack()">&#11013;</button>
+            <button class="purchase-button" onclick="purchaseItem()">Purchase</button> <!-----------------------------------------Usar Esto-------------------------------------------->
+        </div>
+    </div>
+
+
+    <!-- Audio Players -->
+    <audio id="audioPlayer1" src="" type="audio/mp3"></audio>
+    <audio id="audioPlayer2" src="" type="audio/mp3"></audio>
+    <audio id="audioPlayer3" src="" type="audio/mp3"></audio>
+
+    <script> //------------------------------------------------------____________________JavaScript___________________________-----------------------------------------------------------------------
+        let currentPage = "container"; // Track the current page------------------------------------------------------------------------------------------------------------------------
+        //let currentPage = "firstPage"; // Track the current page
+
+        // ✅ Agregar evento para abrir el menú cuando el usuario haga clic en "Select Sport"
+        document.getElementById("openMenuBox").addEventListener("click", function() {
+        document.getElementById("menuBox").style.display = "block"; // Mostrar menú
+        document.getElementById("firstPage").style.display = "block"; // Mostrar botones
+        document.getElementById("container").style.display = "none"; // Ocultar pantalla principal
+        });
+
+        //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+        document.addEventListener("DOMContentLoaded", function () {
+        const openModalButton = document.getElementById("openModal");
+        const closeModalButton = document.getElementById("closeModal");
+        const modal = document.getElementById("videoModal");
+        const video = document.getElementById("youtubeVideo");
+
+            if (openModalButton) {
+            // ✅ Abrir modal al hacer clic en el botón
+                openModalButton.addEventListener("click", function () {
+                    modal.style.display = "flex";
+                });
+            }
+
+            if (closeModalButton) {
+                // ✅ Cerrar modal al hacer clic en la "X"
+                closeModalButton.addEventListener("click", function () {
+                    modal.style.display = "none";
+                    video.src = video.src; // Detener video al cerrar
+                });
+            }
+
+            // ✅ Cerrar modal si el usuario hace clic fuera de él
+            window.addEventListener("click", function (event) {
+                if (event.target === modal) {
+                    modal.style.display = "none";
+                    video.src = video.src;
+                }
+            });
+        });
+        document.addEventListener("keydown", function(event) {
+            let modal = document.getElementById("videoModal");
+
+            if (event.code === "Space" && modal.style.display !== "flex") {
+                event.preventDefault();  // Stop the video from playing outside the modal
+            }
+        });
+        window.onclick = function(event) {
+            let modal = document.getElementById("videoModal");
+            if (event.target === modal) {
+                closeVideoModal();
+            }
+        };
+
+        //--------------------------------------------------------------------------------------------------------------------------------------------------
+        function proceedToMainMenu() {
+            fetch(`https://${GetParentResourceName()}/proceedToMenu`, { method: "POST" });
+        }
+
+        let designCount = 16; // Default fallback
+
+        // Request Config.DesignCount from Lua
+        fetch(`https://${GetParentResourceName()}/getDesignCount`, {
+            method: "POST",
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.designCount) {
+                designCount = data.designCount; // Update the count from Lua
+            }
+        })
+        .catch(error => console.error("Failed to get DesignCount:", error));
+        
+        // Use the correct count when showing the submenu
+        function showSubMenu(type) {
+            const options = document.getElementById("options");
+            const title = document.getElementById("submenu-title");
+
+            document.getElementById("mainMenu").style.display = "none";
+            document.getElementById("subMenu").style.display = "block";
+
+            title.innerText = type.charAt(0).toUpperCase() + type.slice(1);
+            options.innerHTML = "";
+
+            const count = type === "deck" ? designCount : 10; // Use fetched value
+            const prefix = type === "deck" ? "deck_" : "C";
+
+            for (let i = 1; i <= count; i++) {
+                const img = document.createElement("img");
+                img.src = `nui://${GetParentResourceName()}/nui/customs/${prefix}${i}.png`;
+                img.alt = `${type} ${i}`;
+                img.setAttribute("data-id", i); // Add item ID
+                img.setAttribute("data-type", type); // Add item type
+                img.onclick = () => selectItem(type, i, img); // Pass img element to function
+                options.appendChild(img);
+            }
+        }
+
+        function selectItem(type, id, element) {
+            // Remove previous selections
+            document.querySelectorAll(".selected-item").forEach(item => {
+                item.classList.remove("selected-item");
+            });
+
+            // Set the selected item
+            element.classList.add("selected-item");
+
+            // Store selected item's attributes for purchase
+            element.setAttribute("data-id", id);
+            element.setAttribute("data-type", type);
+
+            const callback = type === "deck" ? "deckSelected" : type === "trucks" ? "trucksSelected" : "wheelsSelected";
+
+            fetch(`https://${GetParentResourceName()}/${callback}`, {
+                method: "POST",
+                body: JSON.stringify({ id }),
+            });
+        }
+
+        function purchaseItem() {
+            let selectedItem = document.querySelector(".selected-item"); // Get the selected item
+            if (!selectedItem) {
+                return;
+            }
+
+            let itemId = selectedItem.getAttribute("data-id"); // Get selected item ID
+            let itemType = selectedItem.getAttribute("data-type"); // Get selected item type
+
+            fetch(`https://${GetParentResourceName()}/purchaseItem`, {
+                method: "POST",
+                body: JSON.stringify({ id: itemId, type: itemType }),
+            });
+        }
+
+
+
+        function closeMenu() { //----------------------------------------------------------------------------??????????????-------------------------------------------
+            document.getElementById("menuBox").style.display = "none"; // Ocultar menú
+            document.getElementById("container").style.display = "block"; // Volver a la pantalla principal------------------------?????????????????????--------------------------------
+            //fetch(`https://${GetParentResourceName()}/closeMenu`, { method: "POST" });
+        }
+
+        function closeMain() { //----------------------------------------------------------------------------??????????????-------------------------------------------
+            document.getElementById("menuBox").style.display = "none"; // Ocultar menú
+            document.getElementById("container").style.display = "none"; // Volver a la pantalla principal------------------------?????????????????????--------------------------------
+            fetch(`https://${GetParentResourceName()}/closeMenu`, { method: "POST" });
+        }
+
+
+        
+        let youtubePlayer; // Store the YouTube player instance
+
+        // Initialize the YouTube Player
+        function onYouTubeIframeAPIReady() {
+            youtubePlayer = new YT.Player('youtubeVideo', {
+                events: {
+                    'onReady': onPlayerReady
+                }
+            });
+        }
+
+        // Ensure video loads when the modal is opened
+        function openVideoModal() {
+            document.getElementById("videoModal").style.display = "flex"; // Show modal
+            document.getElementById("mainMenu").style.display = "none";  // Hide main menu
+            document.getElementById("subMenu").style.display = "none";  // Hide subMenu
+
+            if (youtubePlayer) {
+                youtubePlayer.playVideo(); // Play video when modal opens
+            }
+        }
+
+        // Pause the video when closing the modal
+        function closeVideoModal() {
+            document.getElementById("videoModal").style.display = "none"; // Hide modal
+            document.getElementById("mainMenu").style.display = "block";  // Show main menu
+
+            if (youtubePlayer) {
+                youtubePlayer.pauseVideo(); // Pause video without restarting
+            }
+        }
+        function onYouTubeIframeAPIReady() {
+            youtubePlayer = new YT.Player('youtubeVideo', {
+                events: {
+                    'onReady': onPlayerReady,
+                    'onStateChange': onPlayerStateChange
+                }
+            });
+        }
+
+        // Set best quality when video starts playing
+        function onPlayerStateChange(event) {
+            if (event.data === YT.PlayerState.PLAYING) {
+                youtubePlayer.setPlaybackQuality('hd1080'); // Force 1080p (change to 'highres' for max available)
+            }
+        }
+
+
+        function goBack() {
+            const subMenu = document.getElementById("subMenu");
+            const mainMenu = document.getElementById("mainMenu");
+            const firstPage = document.getElementById("firstPage");
+            const container = document.getElementById("container");//----------------------------------------------------------------------------------------------------------
+
+            if (subMenu.style.display === "block") {
+                subMenu.style.display = "none";
+                mainMenu.style.display = "block";
+                currentPage = "mainMenu";
+
+            } else if (mainMenu.style.display === "block") {
+                mainMenu.style.display = "none";
+                firstPage.style.display = "block";
+                currentPage = "firstPage";
+
+                fetch(`https://${GetParentResourceName()}/goBack`, {
+                    method: "POST",
+                    body: JSON.stringify({ currentPage: "mainMenu" }),
+                });
+            //----------------------------------------------------------------------------------------------------------------------------------------------------------------
+            } else if (firstPage.style.display === "block") {
+                firstPage.style.display = "none";
+                document.getElementById("menuBox").style.display = "none"; // Ocultar menú
+                container.style.display = "block";
+                currentPage = "container";
+
+                fetch(`https://${GetParentResourceName()}/goBack`, {
+                    method: "POST",
+                    body: JSON.stringify({ currentPage: "firstPage" }),
+                });
+            }
+        }
+
+        // Handle NUI Messages
+        window.addEventListener("message", (event) => {
+            const data = event.data;
+            
+            //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------?????????????
+            if (data.action === "showContainer") {
+                document.getElementById("menuBox").style.display = "none";
+                document.getElementById("container").style.display = "block";
+                document.getElementById("firstPage").style.display = "none";
+                document.getElementById("mainMenu").style.display = "none";
+                document.getElementById("subMenu").style.display = "none";
+            }
+            else if (data.action === "showFirstPage") {
+                document.getElementById("menuBox").style.display = "block";
+                document.getElementById("container").style.display = "none";
+                document.getElementById("firstPage").style.display = "block";
+                document.getElementById("mainMenu").style.display = "none";
+                document.getElementById("subMenu").style.display = "none";
+            }
+            else if (data.action === "showMainMenu") {
+                document.getElementById("firstPage").style.display = "none";
+                document.getElementById("mainMenu").style.display = "block";
+            }
+            else if (data.action === "hideMenu") {
+                document.getElementById("menuBox").style.display = "none";
+            }
+        });
+
+        // Audio Player Integration
+        const audioPlayer1 = document.getElementById("audioPlayer1");
+        const audioPlayer2 = document.getElementById("audioPlayer2");
+        const audioPlayer3 = document.getElementById("audioPlayer3");
+
+        audioPlayer1.volume = 1;
+        audioPlayer2.volume = 1;
+        audioPlayer3.volume = 0.3;
+
+        window.addEventListener("message", (event) => {
+            const data = event.data;
+
+            // Play sound on specific player based on the message
+            if (data.transactionType === "playSound") {
+                if (data.player === 1) {
+                    audioPlayer1.src = data.transactionFile;
+                    audioPlayer1.play();
+                } else if (data.player === 2) {
+                    audioPlayer2.src = data.transactionFile;
+                    audioPlayer2.play();
+                } else if (data.player === 3) {
+                    audioPlayer3.src = data.transactionFile;
+                    audioPlayer3.play();
+                }
+            }
+
+            // Stop sound on the specific player
+            else if (data.transactionType === "stopSound") {
+                if (data.player === 1) {
+                    audioPlayer1.pause();
+                    audioPlayer1.currentTime = 0;
+                } else if (data.player === 2) {
+                    audioPlayer2.pause();
+                    audioPlayer2.currentTime = 0;
+                } else if (data.player === 3) {
+                    audioPlayer3.pause();
+                    audioPlayer3.currentTime = 0;
+                }
+            }
+
+            // Set volume for the specific player
+            else if (data.transactionType === "setVolume") {
+                if (data.player === 1) {
+                    audioPlayer1.volume = data.volume;
+                } else if (data.player === 2) {
+                    audioPlayer2.volume = data.volume;
+                } else if (data.player === 3) {
+                    audioPlayer3.volume = data.volume;
+                }
+            }
+        });
+
+        document.addEventListener("DOMContentLoaded", function() {
+            document.getElementById("closeContainer").addEventListener("click", function() {
+                document.getElementById("container").style.display = "none"; // Oculta el contenedor
+            });
+        }); 
+
+    </script>
+    <!--<script src="Main.js"></script>-->
+</body>
+</html>
+
