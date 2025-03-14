@@ -471,27 +471,31 @@ body {
 }
 
 /* Estilos específicos para el botón de cierre del contenedor principal */
-#closeContainer {
+#closeContainerNew {
     position: absolute;
     top: 15px;
     right: 15px;
-    width: 50px; /* Increase width for a larger clickable area */
-    height: 50px; /* Increase height for a better hitbox */
+    width: 60px;
+    height: 60px; /* Bigger area */
+    background: white;
+    color: black;
+    border: none;
+    border-radius: 50%; /* Circle */
+    cursor: pointer;
+    font-size: 24px;
+    font-weight: bold;
+    text-align: center;
     display: flex;
     justify-content: center;
     align-items: center;
-    background: transparent;
-    border: none;
-    border-radius: 50%;
-    cursor: pointer;
-    font-size: 28px; /* Keep the X size */
-    line-height: 50px; /* Center the X inside */
-    padding: 0; /* Ensure no unwanted padding */
+    z-index: 9999; /* Ensure it's above everything */
 }
 
-#closeContainer:hover {
-    background-color: rgba(0, 0, 0, 0.1);
+#closeContainerNew:hover {
+    background: white;
+    transform: scale(1.1);
 }
+
 
 
 .back-arrow {
