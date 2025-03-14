@@ -22,7 +22,7 @@
 
     <!-- Main -------------------------------------------------------------------------------------------------------------------------------------------->
     <div id="container" style="display: none;">
-        <button class="closeMain" id="closeContainer" onclick="closeMain()">×</button> <!-- Botón de cierre -->
+        <button class="closeMain" id="closeContainerNew">x</button> <!-- Botón de cierre -->
         <div class="menu-line left"></div>
         <div class="menu-title">Bodhix's Studio</div>
         <div class="menu-line right"></div>
@@ -34,16 +34,16 @@
 
             <button class="menu-item best-spots"> <!-- id="openMenuBox" -->
                 <img src="https://github.com/Bodh1x/fivem-skate-ui/blob/main/Images/comingsoon.jpg?raw=true" alt="Select Sport">
-                <span class="menu-text">EQUIPMENT</span>
+                <span class="menu-text" id="equipmentBtn">Loading...</span>
             </button>
 
             <button class="menu-item select-sport" id="openMenuBox">
                 <img src="https://github.com/Bodh1x/fivem-skate-ui/blob/main/Images/gear.jpg?raw=true" alt="Select Sport">
-                <span class="menu-text">GEAR</span>
+                <span class="menu-text" id="gearBtn">Loading...</span>
             </button>
             <button class="menu-item whats-new" id="openModal">
                 <img src="https://github.com/Bodh1x/fivem-skate-ui/blob/main/Images/features.jpg?raw=true" alt="What's New">
-                <span class="menu-text">WHAT'S NEW</span>
+                <span class="menu-text" id="whatsNewBtn">Loading...</span>
             </button> 
         </div>
 
@@ -61,7 +61,7 @@
         <!-- First Page -->
         <div id="firstPage">
             <div class="buttons">
-                <button class="words-style" onclick="proceedToMainMenu()">Skateboard</button>
+                <button class="words-style" id="skateboardBtn" onclick="proceedToMainMenu()">Loading...</button>
                 <button class="back-arrow" onclick="goBack()">&#11013;</button> <!-------------------------------------------------------goBack--------------------------------------------------->
             </div>
         </div>
@@ -69,9 +69,9 @@
         <!-- Main (Skate) Menu -->
         <div id="mainMenu" style="display: none;">
             <div class="buttons">
-                <button class="words-style" onclick="showSubMenu('deck')">Deck</button>
-                <button class="words-style" onclick="showSubMenu('trucks')">Trucks</button>
-                <button class="words-style" onclick="showSubMenu('wheels')">Wheels</button>
+                <button class="words-style" id="deckBtn" onclick="showSubMenu('deck')">Loading...</button>
+                <button class="words-style" id="trucksBtn" onclick="showSubMenu('trucks')">Loading...</button>
+                <button class="words-style" id="wheelsBtn" onclick="showSubMenu('wheels')">Loading...</button>
                 <button class="back-arrow" onclick="goBack()">&#11013;</button>
             </div>
         </div>
@@ -81,7 +81,7 @@
             <h1 id="submenu-title">Submenu</h1>
             <div id="options"></div>
             <button class="back-arrow" onclick="goBack()">&#11013;</button>
-            <button class="purchase-button" onclick="purchaseItem()">Purchase</button> <!-----------------------------------------Usar Esto-------------------------------------------->
+            <button class="purchase-button" id="purchaseBtn" onclick="purchaseItem()">Loading...</button> <!-----------------------------------------Usar Esto-------------------------------------------->
         </div>
     </div>
 
@@ -103,6 +103,33 @@
         });
 
         //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+        document.addEventListener("DOMContentLoaded", function() {
+            let closeBtn = document.getElementById("closeContainerNew");
+
+            if (closeBtn) {
+                closeBtn.addEventListener("click", function() {
+                    document.getElementById("container").style.display = "none"; // Hide the container
+                    fetch(`https://${GetParentResourceName()}/closeMenu`, { method: "POST" });
+                });
+            }
+        });
+        document.addEventListener("DOMContentLoaded", function() {
+            fetch(`https://${GetParentResourceName()}/getLanguage`, { method: "POST" })
+                .then(response => response.json())
+                .then(language => {
+                    document.getElementById("equipmentBtn").innerText = language.equipment;
+                    document.getElementById("gearBtn").innerText = language.gear;
+                    document.getElementById("whatsNewBtn").innerText = language.whats_new;
+                    document.getElementById("skateboardBtn").innerText = language.skateboard;
+                    document.getElementById("deckBtn").innerText = language.deck;
+                    document.getElementById("trucksBtn").innerText = language.trucks;
+                    document.getElementById("wheelsBtn").innerText = language.wheels;
+                    document.getElementById("purchaseBtn").innerText = language.purchase;
+                })
+                .catch(error => console.error("Failed to load translations:", error));
+        });
+
+
         document.addEventListener("DOMContentLoaded", function () {
         const openModalButton = document.getElementById("openModal");
         const closeModalButton = document.getElementById("closeModal");
@@ -151,7 +178,7 @@
             fetch(`https://${GetParentResourceName()}/proceedToMenu`, { method: "POST" });
         }
 
-        let designCount = 16; // Default fallback
+        let designCount = 18; // Default fallback
 
         // Request Config.DesignCount from Lua
         fetch(`https://${GetParentResourceName()}/getDesignCount`, {
